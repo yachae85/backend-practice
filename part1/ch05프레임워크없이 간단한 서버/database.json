@@ -1,0 +1,11 @@
+{
+  "posts": [
+    { "id": "my_first_post", "title": "My first post", "content": "Hello!" },
+    {
+      "id": "my_second_post",
+      "title": "My 두 번쩨 post",
+      "content": "Second post!"
+    },
+    { "id": "long_title", "title": "long title", "content": "long content" }
+  ]
+}

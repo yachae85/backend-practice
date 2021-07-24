@@ -1,7 +1,6 @@
 //  @ts-check
 
 const http = require('http');
-const { resolve } = require('path');
 const { routes } = require('./api');
 
 const server = http.createServer((req, res) => {

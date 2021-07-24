@@ -13,12 +13,6 @@ POST /posts = 포스팅하기
  * @property {string} content
  */
 
-/** @type {Post[]} */
-const posts = [
-  { id: 'my_first_post', title: 'My first post', content: 'Hello!' },
-  { id: 'my_second_post', title: 'My 두 번쩨 post', content: 'Second post!' },
-];
-
 /**
  * @typedef APiResponse
  * @property {number} statusCode
@@ -32,6 +26,25 @@ const posts = [
  * @property {(matches: string[], body: Object.<string, *> | undefined) => Promise<APiResponse>} callback
  */
 
+const fs = require('fs');
+
+/** @returns {Promise<Post[]>} */
+async function getPosts() {
+  const json = await fs.promises.readFile('database.json', 'utf-8');
+  return JSON.parse(json).posts;
+}
+
+/**
+ * @param {Post[]} posts
+ */
+async function savePost(posts) {
+  const content = {
+    posts,
+  };
+
+  return await fs.promises.writeFile('database.json', JSON.stringify(content));
+}
+
 /**@type {Route[]} */
 const routes = [
   {
@@ -39,7 +52,7 @@ const routes = [
     method: 'GET',
     callback: async () => ({
       statusCode: 200,
-      body: posts,
+      body: await getPosts(),
     }),
   },
   {
@@ -54,6 +67,9 @@ const routes = [
         };
       }
 
+      const posts = await getPosts();
+
+      // @ts-ignore
       const post = posts.find((_post) => _post.id === postId);
 
       if (!post) {
@@ -86,13 +102,22 @@ const routes = [
         };
       }
 
+      if (!body.title || !body.content) {
+        return {
+          statusCode: 404,
+          body: 'Form is wrong',
+        };
+      }
+
       const newPost = {
         id: body.title.toLowerCase().replace(/\s/g, '_'),
         title: body.title,
         content: body.content,
       };
 
+      const posts = await getPosts();
       posts.push(newPost);
+      savePost(posts);
 
       return {
         statusCode: 200,
