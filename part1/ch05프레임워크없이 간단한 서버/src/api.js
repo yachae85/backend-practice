@@ -22,7 +22,7 @@ POST /posts = 포스팅하기
 /**
  * @typedef Route
  * @property {RegExp} url
- * @property {'GET' | 'POST'} method
+ * @property {'GET' | 'POST' | 'DELETE'} method
  * @property {(matches: string[], body: Object.<string, *> | undefined) => Promise<APiResponse>} callback
  */
 
@@ -122,6 +122,40 @@ const routes = [
       return {
         statusCode: 200,
         body: newPost,
+      };
+    },
+  },
+  {
+    url: /^\/posts\/([a-zA-Z0-9-_]+)$/,
+    method: 'DELETE',
+    callback: async (matches) => {
+      const postId = matches[1];
+
+      if (!postId) {
+        return {
+          statusCode: 404,
+          body: 'Not found',
+        };
+      }
+
+      const posts = await getPosts();
+      const postIdx = posts.findIndex((post) => post.id === postId);
+
+      console.log(postIdx);
+
+      if (postIdx === -1) {
+        return {
+          statusCode: 404,
+          body: 'Not found',
+        };
+      }
+
+      posts.splice(postIdx, 1);
+      savePost(posts);
+
+      return {
+        statusCode: 200,
+        body: posts,
       };
     },
   },
