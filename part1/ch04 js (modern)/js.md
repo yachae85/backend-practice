@@ -12,3 +12,19 @@ Microsoft, Google, Apple 등 웹 기술과 관계가 깊은 거대 기술 벤더
 # Spred syntax
 
 (...) 처럼 점 3개를 찍는 것
+
+# functional approach
+
+# Promise
+
+비동기 처리를 할 때 사용
+callback hell 문제를 해결
+
+# Polyfill
+
+JS 표준 라이브러리에 등록되어 있지만 브라우저나 node.js에 구현되어 있지 않은 기능을 미리 사용해 볼 수 있게 만들어진 구현체
+
+# Transpile
+
+코드를 A언어에서 B언어로 변환하는 것
+새로운 버전의 문법을 이해하기 위해 사용
